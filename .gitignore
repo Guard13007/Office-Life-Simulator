@@ -1,0 +1,6 @@
+!builds/
+builds/*
+!builds/latest/
+!builds/modified_exes/
+!builds/build.number
+tmp/

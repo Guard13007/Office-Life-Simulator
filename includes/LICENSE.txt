@@ -1,0 +1,41 @@
+Office Life Simulator is Copyright (c) 2015 Paul Liverman
+
+The following libraries are used by Office Life Simulator:
+
+beholder.lua is Copyright (c) 2011 Enrique García Cota
+cron.lua is Copyright (c) 2011 Enrique García Cota
+hump (gamestate) is Copyright (c) 2010-2013 Matthias Richter
+inspect.lua is Copyright (c) 2013 Enrique García Cota
+lume is Copyright (c) 2015 rxi
+middleclass is Copyright (c) 2011 Enrique García Cota
+Ser is Copyright (c) 2011,2013 Robin Wellner
+
+The following artwork is used in or with Office Life Simulator:
+
+`images/Office Art 1.png` by Avis (c) 2015
+`images/Office Sketch.png` by Avis (c) 2015
+
+Avis (https://player.me/Avis) has released his artwork under the MIT license.
+
+This project (Office Life Simulator) and all the libraries it uses
+(listed above) are released under the MIT License:
+
+The MIT License (MIT)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

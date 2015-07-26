@@ -1,0 +1,83 @@
+I was thinking we should start tracking user data. To start off, generate a UUID using the Lume library. Don't forget to save the time of the first launch, and use the time to seed a clock value.
+
+This idea was written down (or something similar to it) in #2 already. It even started being implemented in work on #5.
+
+Could you close that issue for me?
+
+Today we'd like to implement a Productivity Tracker. This should be a class that manages whether or not employees are monitoring their email systems and responding appropriately.
+
+Use Beholder to check for events to be fired by the email program (we'll add those in later), and then decide how to assign some sort of point value.
+
+Set up a scanner to be able to read through an email's text and figure out what the true meaning is.
+
+Later on, we'll add the ability for the system to recognize other tasks and events fired by other programs.
+
+Oh, and one more thing, the employee should be able to see their current score, maybe in something like a taskbar icon?
+
+I'm closing this issue.
+
+Everything here is mostly done, but see #18 for more/where it continues.
+
+There is a potential memory leak in the email program we have been using. It has a LF object as its main container that isn't always unset properly.
+
+Someone should look into this.
+
+This has probably been effectively solved by #21 being fixed.
+
+Implement an update system of some kind. We need a server to hold the files and manifests of files, then make a program to check the manifests and compare them to local copies, then download the correct files.
+
+It works for the most part, but this is heavily alpha, we shouldn't use it.
+
+The log in dialog isn't closing properly once a user is logged in. I think the problem has to do with Remove() being called within itself.
+
+Try removing the object in the desktop's event observation.
+
+Get help from the creator of LF if needed.
+
+There seems to be a problem with creating two email program instances in the same place. I end up with two LF objects that have different data, but seem to reference the same internal objects. They're also doubling events when deleting emails, which is causing a major problem with productivity tracking.
+
+Replace the clock panel with a proper taskbar. Use a full horizontal list so that we can add infinite items.
+
+Place the clock within the taskbar and add some form of main menu button. The taskbar additionally needs to stay on top of other objects on screen.
+
+Divide the taskbar into sections, so we can have an icon area for background stuff and a main area with regular programs.
+
+Internally, the taskbar needs a main list, a reference to a "start" menu of some fashion (make sure it is not called this to avoid lawsuit), a list of programs and icons, and a clock.
+
+The taskbar should have its own method for rebuilding the list whenever an object is added or removed.
+
+This is mostly done for now.
+
+Make sure you update the manifest for a prototype release. If you've missed anything, everything goes down in flames.
+
+The log in system needs to be refactored. The code is very messy. It also allows a log in with a blank username and password, which definitely SHOULD NOT HAPPEN.
+
+We'll have to finish cleaning up the code later, right now we need to launch a prototype.
+
+There's an extra space printing at the end of every paragraph. Figure out what's causing this and keep it from happening.
+
+Rewrite everything dealing with LF to remove all objects from the inside-out. Like, start with the inner-most object, and then head out like an onion. That'd work great, man.
+
+It should work.
+
+Why doesn't the log in work when I press enter?
+
+Oh shit, we need to fix that ASAP.
+
+Yea, we need to fix that.
+
+Why is our license out of date? Fix it.
+
+Right now, we aren't adhering to the licenses of several libraries already in use. Make sure this is taken care of before the press finds out.
+
+Everything really should have icons. I mean, this isn't the 1980s where everything was just text. C'mon man.
+
+We don't have any artists on staff though, so we'll be relying on programmer art to get this thing out the door.
+
+Make sure the taskbar utilizes the new icons that have been made.
+
+Hey, you up for lunch? I'm thinking about having a salad.
+
+Dear Sir/Madam, I am writing to inform you of a fire that has broken out in the IT department. Please send help immediately.
+
+Issues #1 #3 #4 #6 #10 #16 #18 #21 #25 #28 #34 #41 #75 incorporated.

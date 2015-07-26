@@ -1,0 +1,7 @@
+fix bug Markov gen text nothing
+refactor emailprogram to remove nested lists!!
+lorem ipsums are gone right now!!
+ MARKOV CHAIN GEN NEEDS TO BACKSLASH ANY BACKSLASHES!!
+Everything in the chain starts with this!
+email text gen needs to be optimizaed I'm sure
+Markov chain gen needs to be optimized
