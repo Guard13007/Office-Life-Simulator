@@ -100,7 +100,9 @@ function Computer:load(file, path)
     elseif data then
         self.os = data.os
         for _,name in ipairs(data.programs) do
-            self:addProgram(name)
+            --self:addProgram(name)
+            local program = self:getProgram(name, true)
+            if program.load then program:load(path .. name .. ".lua") end
         end
     else
         --TODO some sort of flag so user is warned when overwriting save after failed load

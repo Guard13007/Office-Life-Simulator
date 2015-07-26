@@ -1,38 +1,26 @@
 local random = love.math.random
-love.math.setRandomSeed(os.time())
-random()
-
 local class = require "lib.middleclass"
-local Email = require "Email"
-local lume = require "lib.lume"
+local Email = require "emails.Email"
 local Markov = require "lib.Markov"
-local rText = require "lib.rText" --TODO Replace entirely
-local serialize = require "lib.ser"
-local filesystem = love.filesystem
+local lume = require "lib.lume"
+local rText = require "lib.rText"
 
--- functions defined below used to randomly generate emails
-local subject, from, text
+local subject, from, text --local random generation function defined below
 
-local LoremIpsumEmail = class('LoremIpsumEmail', Email)
+local LoremIpsumEmail = class("LoremIpsumEmail", Email)
 
-function LoremIpsumEmail:initialize(clockTime)
-    Email.initialize(self)
-    self:setTime(clockTime)
+function LoremIpsumEmail:initialize(time)
+    local data = {
+        subject = subject(),
+        from = from(),
+        text = if random(2) == 1 then text("lorem") else text("ipsum") end,
+        time = 0,
+        type = "LoremIpsum"
+    }
 
-    self._subject = subject()
-    self._from = from()
-
-    local r = random(2)
-    if r == 1 then
-        self._text = text("lorem")
-    else
-        self._text = text("ipsum")
-    end
-
-    self._type = "LoremIpsum"
+    Email.initialize(self, data)
+    self:setTime(time)
 end
-
--- :save() / :load() are unmodified from Email class
 
 function subject()
     local buzzWords = {"Innovation", "Scability", "Bug", "Synergy", "Report", "Flagship", "Stagnant", "Technical", "Order", "Failure", "Update", "Stuff", "salad", "lunch", "Q/A", "Manager", "Lead", "Project", "Issue", "Wow", "Such", "Program", "Office", "Life", "Simulator", "Staff", "Fire", "Sir/Madam", "Mantis", "git", "CM"}
@@ -62,59 +50,51 @@ function from()
     return lume.weightedchoice(titles)
 end
 
--- NOTE MASSIVELY NEEDS A REWRITE PROBABLY
-function text(loremIpsum)
-    -- generate chain_source if needed
+function text(filler)
+    --generate source if needed
     if not next(Markov.chain_source) then
-        Markov.process_corpus(love.filesystem.read("lib/corpus/LoremIpsumEmail.txt"))
+        Markov.process_corpus(love.filesystem.read("emails/LoremIpsumEmails.txt"))
         Markov.dump_chain_source()
     end
 
-    --local paragraphs = random(1, 5)
     local paragraphs = love.math.randomNormal(2, 5) -- 1 to 9, mostly around 5
     local text = ""
 
     for i=1,paragraphs do
         local r = random()
         local paragraphLength
+        -- note these are word counts!
         if r > 0.65 then
-            paragraphLength = love.math.randomNormal(2, 9)  --shortest!
+            paragraphLength = love.math.randomNormal(2, 9) --shortest!
         elseif r > 0.40 then
             paragraphLength = love.math.randomNormal(4, 24) --shorter
         else
             paragraphLength = love.math.randomNormal(6, 50) --longer
         end
-        --local paragraphLength = love.math.randomNormal(1, 20) --stddev, mean (5, 105) stddev^2 is variance (I want between 1 or 5 or something and 21*5 words)
 
-        -- NOTE there is a bug that caused the generated text to sometimes be nothing!
-        -- NOTE this is hastily shittily fixed in the library AND here and it STILL doesn't work right...
         local generatedText = Markov.generate_text(paragraphLength)
-        while generatedText == "" do
+        while generatedText:len() < 25 do --HACK NOTE WARNING ETC may lead to infinite loop!!
             generatedText = Markov.generate_text(paragraphLength)
         end
         text = text .. generatedText .. ".\n\n"
     end
 
-    --TODO now I need a way to insert loremIpsum in there!
     if text:len() == 0 then
-        return "ERROR"
+        return "ERROR " .. filler
     end
-    local r = random(1, text:len())
-    --local r = 2 --temporary to test for letter duplication
-    r = text:find(" ", r) -- should be first space
+    local r = random(1, text:len()-20) --no word should be longer than 20 characters...
+    r = text:find(" ", r) --should be first space after r
     if r == nil then
-        return "ERROR 2" -- FUCK FUCK FUCK FUCK...
+        return "ERROR 2 " .. filler
     end
-    --text = text:gsub("%l+", loremIpsum, 1) -- %S+ is space-separated tokens
-    text = text:sub(1,r) .. text:sub(r+1):gsub("%l+", loremIpsum, 1)
+    text = text:sub(1,r) .. text:sub(r+1):gsub("%l+", filler, 1)
     -- NOTE needs to be smart enough to capitalize or punctuate after itself! (perhaps just change %S+ to only check for lowercase words?)
     -- %l+ would check for lowercase TMP USE THIS
     -- %u%l* would be an uppercased first letter ??
     -- %u+ would be all uppercase
     -- (how do I do OR in pattern matching ?)
 
-    return text:sub(1,-3) -- strip extra \n\n
-    --return "'" .. text:sub(1,-3) .. "'" --TMP (used to varify some text strings are ENTIRELY "" NOTHING)
+    return text:sub(1,-3) --strip extra \n\n
 end
 
 return LoremIpsumEmail
