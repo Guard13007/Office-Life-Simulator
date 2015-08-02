@@ -1,6 +1,6 @@
 # [Office-Life-Simulator](http://guard13007.itch.io/office-life-simulator)
 
-Prototype release date: *JUNE 15TH*. Thank you for your time, see you then!
+Prototype v2 release date: *AUGUST 31ST*. Thank you for your time, see you then!
 
 ---
 
