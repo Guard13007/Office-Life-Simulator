@@ -20,4 +20,4 @@ Features:
 
 ---
 
-[devblog](http://officelifesim.tumblr.com/) | [Website](http://guard13007.itch.io/office-life-simulator?secret=y3QYIrn3qgQAcnxPIAbRyX1D0zA) | [Milestones](https://github.com/Guard13007/Office-Life-Simulator/milestones)
+[devblog](http://officelifesim.tumblr.com/) | [Website](http://guard13007.itch.io/office-life-simulator) | [Milestones](https://github.com/Guard13007/Office-Life-Simulator/milestones)

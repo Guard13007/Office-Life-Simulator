@@ -3,7 +3,8 @@ local class = require "lib.middleclass"
 local Email = require "emails.Email"
 local Markov = require "lib.Markov"
 local lume = require "lib.lume"
-local rText = require "lib.rText"
+
+local randomText = require "util.randomText"
 
 local subject, from, text --local random generation function defined below
 
@@ -18,8 +19,7 @@ function LoremIpsumEmail:initialize(time)
         type = "LoremIpsum"
     }
 
-    Email.initialize(self, data)
-    self:setTime(time)
+    Email.initialize(self, data, time)
 end
 
 function subject()
@@ -37,14 +37,14 @@ end
 
 function from()
     local titles = {
-        [rText.name{4, 8} .. ", Manager"] = 0.36,
-        [rText.name({2, 5}, {3, 9}) .. ", Project Lead"] = 0.14,
-        [rText.name({8, 13}) .. ", Project Follow"] = 0.01,
-        [rText.name{6, 9} .. ", Q/A"] = 0.3,
-        [rText.name({1, 4}, {2, 3}) .. ", Q/Q"] = 0.01,
-        [rText.name({4, 7}, {4, 10}) .. ", Customer"] = 0.41,
-        [rText.name{1, 5} .. ", CEO"] = 0.02,
-        [rText.name{14, 21} .. ", Emailer"] = 0.01
+        [randomText.name{4, 8} .. ", Manager"] = 0.36,
+        [randomText.name({2, 5}, {3, 9}) .. ", Project Lead"] = 0.14,
+        [randomText.name({8, 13}) .. ", Project Follow"] = 0.01,
+        [randomText.name{6, 9} .. ", Q/A"] = 0.3,
+        [randomText.name({1, 4}, {2, 3}) .. ", Q/Q"] = 0.01,
+        [randomText.name({4, 7}, {4, 10}) .. ", Customer"] = 0.41,
+        [randomText.name{1, 5} .. ", CEO"] = 0.02,
+        [randomText.name{14, 21} .. ", Emailer"] = 0.01
     }
 
     return lume.weightedchoice(titles)

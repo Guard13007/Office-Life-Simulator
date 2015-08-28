@@ -5,6 +5,7 @@ local serialize = require "lib.ser"
 
 local load = require "util.load"
 local save = require "util.save"
+local log = require "util.log"
 
 local Computer = class("Computer")
 
@@ -24,6 +25,10 @@ function Computer:initialize(OS, Programs)
 end
 
 function Computer:getProgram(name, required)
+    if type(required) == "nil" then
+        required = true --required by default
+    end
+
     if not self._programs[name] and required then
         local Program = require("programs." .. name)
         local program = Program()
@@ -46,7 +51,7 @@ end
 function Computer:after(...)
     local job = cron.after(...)
     table.insert(self._cron, job)
-    --TODO save these somehow if possible, with like a specific "this is this" so they can be rebuilt
+    --TODO save these somehow if possible, so they can be rebuilt
     return job
 end
 
@@ -55,11 +60,14 @@ function Computer:update(dt, seconds)
         if program.update then program:update(dt, seconds) end
     end
 
+    log("--- CRON JOBS UPDATING ---") --NOTE debug
     for index,job in ipairs(self._cron) do
+        log(index, job) --NOTE debug
         if job and job:update(seconds) then
             table.remove(self._cron, index)
         end
     end
+    log("--- CRON JOBS DONE UPDATING ---") --NOTE debug
 end
 
 function Computer:closeAll()
