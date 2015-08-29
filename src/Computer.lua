@@ -5,7 +5,7 @@ local serialize = require "lib.ser"
 
 local load = require "util.load"
 local save = require "util.save"
-local log = require "util.log"
+local log = require "util.logger"
 
 local Computer = class("Computer")
 
@@ -22,6 +22,8 @@ function Computer:initialize(OS, Programs)
         self:getProgram("StartMenu", true):open()
         self:getProgram("ProductivityTrackerProgram", true):open()
     end)
+
+    self.firstRun = true
 end
 
 function Computer:getProgram(name, required)
@@ -70,6 +72,12 @@ function Computer:update(dt, seconds)
     log("--- CRON JOBS DONE UPDATING ---") --NOTE debug
 end
 
+function Computer:hideAll()
+    for _,program in pairs(self._programs) do
+        if program.hide and program:isOpen() then program:hide() end
+    end
+end
+
 function Computer:closeAll()
     for _,program in pairs(self._programs) do
         if program.close then program:close() end
@@ -112,6 +120,7 @@ function Computer:load(file, path)
             local program = self:getProgram(name, true)
             if program.load then program:load(path .. name .. ".lua") end
         end
+        self.firstRun = false --if we successfully loaded, this obviously isn't the first run
     else
         --TODO some sort of flag so user is warned when overwriting save after failed load
         --defaults...so nothing is changed

@@ -1,3 +1,5 @@
+--TODO rewrite in a better format if possible!
+
 local emails = {
     welcomeToJob = {
         subject = "Welcome to <insert company name>!",

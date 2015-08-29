@@ -11,10 +11,18 @@ local subject, from, text --local random generation function defined below
 local LoremIpsumEmail = class("LoremIpsumEmail", Email)
 
 function LoremIpsumEmail:initialize(time)
+    local r = random(2)
+    local word
+    if r == 1 then
+        word = "lorem"
+    else
+        word = "ipsum"
+    end
+
     local data = {
         subject = subject(),
         from = from(),
-        text = if random(2) == 1 then text("lorem") else text("ipsum") end,
+        text = text(word),
         time = 0,
         type = "LoremIpsum"
     }
