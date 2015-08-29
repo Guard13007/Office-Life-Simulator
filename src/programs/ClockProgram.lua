@@ -80,6 +80,18 @@ function ClockProgram:getHeight()
     return self._height
 end
 
+function ClockProgram:save(...)
+    if self._clock then
+        return self._clock:save(...)
+    end
+end
+
+function ClockProgram:load(...)
+    if self._clock then
+        return self._clock:load(...)
+    end
+end
+
 --TODO previously open() added it to a Taskbar it knows about, this needs to be handled elsewhere
 function ClockProgram:open()
     if not self._open then

@@ -1,3 +1,4 @@
+--TODO clean this file the fuck up
 -- GAME DEBUG SETTINGS --
 local bypassLogIn = false
 local saveEnabled = false
@@ -18,7 +19,8 @@ local story = require "emails.story"
 local secondsInRealTime, timing = 0.02, 0 --used in update loop to keep time correct
 local lateEmailCronJob, emailCronJob      --used to track when certain emails should be sent
 
-local computer = Computer()
+computer = Computer()
+local computer = computer
 
 local desktop = {}
 
