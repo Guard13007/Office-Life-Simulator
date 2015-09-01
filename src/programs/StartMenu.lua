@@ -43,16 +43,15 @@ function StartMenu:open()
                 menu:AddOption(program:getProgramName(), program:getIcon(), function() program:Open() end)
             end
 
+            local taskbar = computer:getProgram("Taskbar", false)
+
             menu:AddOption("Log Out", "images/DefaultLogOutButtonIcon.png", function()
                 --TODO closes anything open, and opens LogInProgram
-                local taskbar = computer:getProgram("Taskbar", false)
-                local taskbarHeight = 0
 
                 computer:closeAll()
 
                 if taskbar then
                     taskbar:open()
-                    taskbarHeight = taskbar:getHeight()
                     computer:getProgram("ClockProgram", true):open()
                     computer:getProgram("LogInProgram", true):open()
                 end
@@ -60,10 +59,15 @@ function StartMenu:open()
                 beholder.trigger("StartMenu", "logged out")
             end)
 
+            local taskbarHeight = 0
+            if taskbar then
+                taskbarHeight = taskbar:getHeight()
+            end
+
             local _, h = menu:GetSize()
             menu:SetPos(0, lg.getHeight() - taskbarHeight - h*(#self._programs+1))
         end
-        computer:getProgram("Taskbar", true):setStartButton(self)
+        computer:getProgram("Taskbar", true):setStartButton(self.mainLF) --TODO refactor this shit
 
         self._open = true
     end

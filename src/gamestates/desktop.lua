@@ -35,6 +35,9 @@ local function sendEmails()
 end
 
 function desktop:init()
+    computer:getProgram("Taskbar", true):open()
+    computer:getProgram("StartMenu", true):open()
+
     if saveEnabled then
         computer:load()
     end
