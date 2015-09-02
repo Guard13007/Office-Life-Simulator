@@ -18,6 +18,7 @@ function Computer:initialize(OS, Programs)
 
     self._cron = {}                 --stores timed tasks to be completed
     self._programs = Programs or {} --table of references
+    self._users = {}
 
     self._observeLogIn = beholder.observe("LogInProgram", "logged in", function()
         self:getProgram("StartMenu", true):open()
@@ -125,6 +126,14 @@ function Computer:save(file, path)
     }
 
     save(path .. file, data)
+
+    --Old Save Updating--
+
+    --Prototype
+    local fs = love.filesystem
+    if fs.exists(path .. "user.lua") then
+        fs.remove(path .. "user.lua") --old single-user save location
+    end
 end
 
 function Computer:load(file, path)
@@ -141,14 +150,23 @@ function Computer:load(file, path)
             --self:addProgram(name)
             local program = self:getProgram(name, true)
             if program.load then program:load(path .. name .. ".lua") end
+            self._programs[name] = program
         end
         self.firstRun = false --if we successfully loaded, this obviously isn't the first run
 
-        --compatibility for prototype v1
+        --Old Save Updating--
+
+        --Prototype
         if not data.users then
             local user = User()
             user:load(path .. "user.lua")
-            --TODO FINISH THIS, WHAT DO WE DO WITH IT?!!
+            self._users[user:getUsername()] = user
+        else
+            for _,name in ipairs(data.users) do
+                local user = User()
+                user:load(path .. "users/" .. name .. ".lua")
+                self._users[name] = user
+            end
         end
     else
         --TODO some sort of flag so user is warned when overwriting save after failed load
