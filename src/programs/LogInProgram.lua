@@ -84,86 +84,73 @@ function LogInProgram:open()
                     list:Remove()
                     frame:Remove()
                 end
+                --don't forget to return after calling this... o.o
             end
 
-            --
-end
-
---[[
-        if self.User:getUsername() == "" and self.username:GetText() == "" then
-            logInError("You need to choose a username!\n\n(This will also be how you load a saved game.)")
-            return
-        end
-        if self.User:getPassword() == "" and self.password:GetText() == "" then
-            logInError("You need to choose a password!\n\n(This will also be how you load a saved game.)")
-            return
-        end
-        if self.User:getUsername() == self.username:GetText() then
-            if self.User:getPassword() == self.password:GetText() then
+            local function logIn()
                 beholder.trigger("LogInProgram", "logged in")
-                self:Close()
-            else
-                -- this condition shouldn't be possible but hey, the first time I tried to test this, I ended up needing it
-                -- it is possible because "" == "" I need to rewrite this whole thing!
-                if self.User.password == "" then
-                    self.User.password = self.password:GetText()
-                    beholder.trigger("LogInProgram", "logged in")
-                    self:Close()
+                self:close()
+                --don't forget to return after calling this... o.o
+            end
+
+            if (self._username:GetText() == "") or (self._password:GetText() == "") then
+                logInError("You need to enter a username and/or password!")
+                return
+            end
+
+            if computer:usersExist() then
+                local user = computer:getUser(User.static.sanitize(self._username:GetText()))
+                if user:getPassword() == "" then
+                    -- this user didn't exist (because there ARE users, just not this one)
+                    computer:removeUser(user:getSanitizedUsername())
+                    logInError("Invalid username and/or password!")
+                    return
                 else
-                    self.password:SetText("")
-                    logInError("Invalid password!")
+                    -- this user exists, check password
+                    if self._password:GetText() == user:getPassword() then
+                        logIn()
+                        return
+                    else
+                        logInError("Invalid username and/or password!")
+                        return
+                    end
                 end
-            end
-        else
-            if self.User.username == "" then
-                self.User:setUsername(self.username:GetText())
-                self.User:setPassword(self.password:GetText())
-                beholder.trigger("LogInProgram", "logged in")
-                self:Close()
             else
-                --NOTE BUG: Somehow this condition is triggered with a null username input by user.
-                self.username:SetText("")
-                logInError("Invalid username!\n\n(In the future, this would simply create a new save.)")
+                -- this user doesn't exist, create them (by getting them from computer), then set their password
+                local user = computer:getUser(User.static.sanitize(self._username:GetText()))
+                user:setPassword(self._password:GetText())
+                logIn()
             end
         end
-        --]-]
+
+        self._logInButton.OnClick = submit
+        self._logInButton.OnEnter = submit
+
+        self._open = true
     end
-
-    self.logInButton.OnClick = submit
-    self.logInButton.OnEnter = submit
-
-    self.open = true
 end
 
----[[
-function LogInProgram:Show()
-    if self.open then
+function LogInProgram:show()
+    if self._open then
         self.mainLF:SetVisible(true)
-    else
-        print("LogInProgram tried to Show when not open.")
     end
 end
 
-function LogInProgram:Hide()
-    if self.open then
+function LogInProgram:hide()
+    if self._open then
         self.mainLF:SetVisible(false)
-    else
-        print("LogInProgram tried to Hide when not open.")
     end
 end
---]-]
 
-function LogInProgram:Close()
-    if self:isOpen() then
-        self.logInButton:Remove()
-        self.password:Remove()
-        self.username:Remove()
+function LogInProgram:close()
+    if self._open then
+        self._logInButton:Remove()
+        self._password:Remove()
+        self._username:Remove()
         self.mainLF:Remove()
-        --self.mainLF = false --just in case?
 
-        self.open = false
+        self._open = false
     end
 end
-]]
 
 return LogInProgram

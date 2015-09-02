@@ -52,18 +52,28 @@ function Computer:addProgram(name, reference)
     end
 end
 
+-- NOTE USE SANITIZED USERNAME --
 function Computer:getUser(username)
     if not self._users[username] then
-        --local Program = require("programs." .. name)
         local user = User()
-        --user:load(path .. "users/" .. username)
-
-        --TODO THIS -> self._users[username] = load(username)
-        --local program = Program()
-        --self._programs[name] = program
+        user:load(path .. "users/" .. username .. ".lua")
+        self._users[username] = user
     end
 
     return self._users[username]
+end
+
+-- NOTE USE SANITIZED USERNAME --
+function Computer:removeUser(username)
+    self._users[username] = nil
+end
+
+function Computer:usersExist()
+    if next(self._users) == nil then
+        return false
+    else
+        return true
+    end
 end
 
 function Computer:after(...)
@@ -160,7 +170,7 @@ function Computer:load(file, path)
         if not data.users then
             local user = User()
             user:load(path .. "user.lua")
-            self._users[user:getUsername()] = user
+            self._users[user:getSanitizedUsername()] = user
         else
             for _,name in ipairs(data.users) do
                 local user = User()

@@ -29,7 +29,7 @@ end
 
 function User:setUsername(username)
     self._username = username
-    self._sanitizedUsername = string.gsub(username, "%A", "%-") --replace all non-characters with "-"
+    self._sanitizedUsername = User.static.sanitize(username)
 end
 
 function User:getUsername()
@@ -85,6 +85,10 @@ function User:load(file)
 
     --Prototype
     if self._name == nil then self._name = "" end
+end
+
+function User.static.sanitize(username)
+    return string.gsub(username, "%A", "%-") --replace all non-characters with "-"
 end
 
 return User
