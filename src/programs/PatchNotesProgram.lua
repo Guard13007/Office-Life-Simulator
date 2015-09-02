@@ -1,23 +1,19 @@
 local class = require "lib.middleclass"
-local Program = require "Program"
+local Program = require "programs.Program"
 local lf = require "lib.LoveFrames"
 
-local PatchNotesProgram = class('PatchNotesProgram', Program)
+local PatchNotesProgram = class("PatchNotesProgram", Program)
 
-function PatchNotesProgram:initialize(computer)
+function PatchNotesProgram:initialize()
+    Program.initialize(self)
     self._programName = "Patch Notes"
-    --self.icon = "images/PatchNotesProgramIconDefault.png"
 
-    self._Computer = computer
+    self._list = nil
+    self._text = nil
 end
 
-function PatchNotesProgram:SetComputer(computer)
-    self._Computer = computer
-end
-
-function PatchNotesProgram:GetComputer()
-    return self._Computer
-end
+--NOTE/TODO make sure this displays once and only once on first run, regardless of user saves?
+-- (separate save file for info about whether or not to show this)
 
 local temporaryIntroText = [[
 Hello! Welcome to Office Life (Simulator)!
@@ -32,49 +28,45 @@ That said, if you ask a question that I'm answering right now, I will ignore you
 - Right now you have one save-game. In the future, I will have a system for multiple saves, and you will choose which one you want to load by the username you type in when wanting to log in.
 - Like I said before, contact me with any questions, suggestions, complaints, or money you'd like to give me...although I don't know why you'd want to..]]
 
-function PatchNotesProgram:Open()
-    if not self:isOpen() then
-        self._mainLF = lf.Create('frame')
-        self._mainLF:SetName("Patch Notes")
-        self._mainLF:SetSize(400, 500)
-        self._mainLF:Center()
+function PatchNotesProgram:open()
+    if not self._open then
+        self.mainLF = lf.Create("frame")
+        self.mainLF:SetName("Patch Notes")
+        self.mainLF:SetSize(400, 500)
+        self.mainLF:Center()
 
-        self._list = lf.Create('list', self._mainLF)
+        self._list = lf.Create("list", self.mainLF)
         self._list:SetPos(5, 30)
-        local w, h = self._mainLF:GetSize()
+        local w, h = self.mainLF:GetSize()
         self._list:SetSize(w - 10, h - 35)
         self._list:SetPadding(5)
 
-        self._text = lf.Create('text', self._list)
+        self._text = lf.Create("text", self._list)
         self._text:SetText(temporaryIntroText)
 
         self._open = true
     end
 end
 
-function PatchNotesProgram:Show()
-    if self:isOpen() then
-        self._mainLF:SetVisible(true)
-    else
-        print("PatchNotesProgram tried to Show while not open.")
+function PatchNotesProgram:show()
+    if self._open then
+        self.mainLF:SetVisible(true)
     end
 end
 
-function PatchNotesProgram:Hide()
-    if self:isOpen() then
-        self._mainLF:SetVisible(false)
-    else
-        print("PatchNotesProgram tried to Hide while not open.")
+function PatchNotesProgram:hide()
+    if self._open then
+        self.mainLF:SetVisible(false)
     end
 end
 
-function PatchNotesProgram:Close()
-    if self:isOpen() then
-        self._mainLF:Remove()
+function PatchNotesProgram:close()
+    if self._open then
+        self._text:Remove()
+        self._list:Remove()
+        self.mainLF:Remove()
 
         self._open = false
-    else
-        print("PatchNotesProgram tried to close when already closed.")
     end
 end
 
