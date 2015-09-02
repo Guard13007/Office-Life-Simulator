@@ -1,6 +1,8 @@
 # [Office-Life-Simulator](http://guard13007.itch.io/office-life-simulator)
 
-Prototype v2 release date: *AUGUST 31ST*. Thank you for your time, see you then!
+Prototype v2 release date: Not scheduled, due to unfortunate circumstances during last month. I apologize for being behind.
+
+Check out the [devblog](http://officelifesim.tumblr.com/) for more update info! (Also I'm thinking about livestreaming some of the development.)
 
 ---
 
