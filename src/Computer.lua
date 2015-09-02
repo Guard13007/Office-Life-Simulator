@@ -2,6 +2,7 @@ local class = require "lib.middleclass"
 local beholder = require "lib.beholder"
 local cron = require "lib.cron"
 local serialize = require "lib.ser"
+local User = require "User"
 
 local load = require "util.load"
 local save = require "util.save"
@@ -48,6 +49,20 @@ function Computer:addProgram(name, reference)
         local program = Program()
         self._programs[name] = program
     end
+end
+
+function Computer:getUser(username)
+    if not self._users[username] then
+        --local Program = require("programs." .. name)
+        local user = User()
+        --user:load(path .. "users/" .. username)
+
+        --TODO THIS -> self._users[username] = load(username)
+        --local program = Program()
+        --self._programs[name] = program
+    end
+
+    return self._users[username]
 end
 
 function Computer:after(...)
@@ -97,9 +112,16 @@ function Computer:save(file, path)
         table.insert(programNames, name)
     end
 
+    local userNames = {}
+    for user,data in pairs(self._users) do
+        data:save(path .. "users/" .. user .. ".lua")
+        table.insert(userNames, user)
+    end
+
     local data = serialize{
         os = self.os,
-        programs = programNames
+        programs = programNames,
+        users = userNames
     }
 
     save(path .. file, data)
@@ -121,6 +143,13 @@ function Computer:load(file, path)
             if program.load then program:load(path .. name .. ".lua") end
         end
         self.firstRun = false --if we successfully loaded, this obviously isn't the first run
+
+        --compatibility for prototype v1
+        if not data.users then
+            local user = User()
+            user:load(path .. "user.lua")
+            --TODO FINISH THIS, WHAT DO WE DO WITH IT?!!
+        end
     else
         --TODO some sort of flag so user is warned when overwriting save after failed load
         --defaults...so nothing is changed
